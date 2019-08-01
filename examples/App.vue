@@ -1,6 +1,9 @@
 <template>
   <div id="app">
-    <ButtonThree>按钮</ButtonThree>
+    <ButtonThree>Hover me I'm awesome</ButtonThree>
+    <ButtonThree
+      type="threeBtn"
+    >Hover me I'm awesome</ButtonThree>
   </div>
 </template>
 
