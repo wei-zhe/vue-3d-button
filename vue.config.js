@@ -5,5 +5,9 @@ module.exports = {
             template: 'publish/index.html',
             filename: 'index.html',
         }
+    },
+
+    css: {
+      extract: false
     }
 }
