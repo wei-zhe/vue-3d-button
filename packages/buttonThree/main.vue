@@ -88,6 +88,11 @@
         default: false,
       },
     },
+    watch: {
+      'autofocus' (val, oldVal) {
+        this.btnFocus = this.autofocus;
+      },
+    },
     mounted () {
       document.body.onmouseup = (e) => { 
         this.documentMouseup(e);
@@ -222,12 +227,17 @@
           this.btnFocus = false;
         }
         this.docStyle = e.target.parentNode.style;
-        let rgba      = this.bgColor.split('(')[1].split(')')[0].split(',');
-        let boxShadow =  `0 0 1px 15px rgba(${rgba[0]},${rgba[1]},${rgba[2]}, 0.4), 
-                          0 0 1px 30px rgba(${rgba[0]},${rgba[1]},${rgba[2]}, 0.1), 
-                          0 0 1px 45px rgba(${rgba[0]},${rgba[1]},${rgba[2]}, 0.1)
-                        `;
-        this.docStyle.setProperty('--boxShadow', boxShadow)       
+        let width = Math.round(e.target.clientHeight / 4);
+        
+        if(width){
+
+          let rgba      = this.bgColor.split('(')[1].split(')')[0].split(',');
+          let boxShadow =  `0 0 1px ${width}px rgba(${rgba[0]},${rgba[1]},${rgba[2]}, 0.4), 
+                            0 0 1px ${width*2}px rgba(${rgba[0]},${rgba[1]},${rgba[2]}, 0.1), 
+                            0 0 1px ${width*3}px rgba(${rgba[0]},${rgba[1]},${rgba[2]}, 0.1)
+                          `;
+          this.docStyle.setProperty('--boxShadow', boxShadow)       
+        }
       },
     }
   };
