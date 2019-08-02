@@ -1,10 +1,21 @@
 {
   "name": "vue-3d-button",
-  "version": "0.1.0",
-  "private": true,
+  "version": "1.0.0",
+  "private": false,
+  "license" : "MIT",
+  "main"   : "lib/vue-3d-button.umd.min.js",
+  "files"  : [  
+    "dist",
+    "examples"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wei-zhe/vue-3d-button.git"
+  }, 
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+    "build": "vue-cli-service build",
+    "lib": "vue-cli-service build --target lib --name vue-3d-button --dest lib packages/index.js"
   },
   "dependencies": {
     "core-js": "^2.6.5",
