@@ -1,6 +1,6 @@
 {
   "name": "vue-3d-button",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "private": false,
   "license" : "MIT",
   "main"   : "lib/vue-3d-button.umd.min.js",

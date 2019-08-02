@@ -174,9 +174,9 @@
         }
       },
       colorfulMove(e){
-        console.log(e.pageX - e.target.offsetLeft)
-        let x  = e.pageX - e.target.offsetLeft;
-        let y  = e.pageY - e.target.offsetTop;
+        console.log(e.offsetX, e.pageX - e.target.offsetLeft)
+        let x  = e.offsetX;
+        let y  = e.offsetY;
         let w = e.target.clientWidth  * 4;
         let h = e.target.clientHeight * 7;
         
