@@ -1,25 +1,33 @@
 <template>
-  <div style="display: inline-block;"> 
-  
+  <div
+    :class="type + '-box'"
+    style="display: inline-block;"
+  > 
+
     <button
+      ref="button"
       @click      = "handleClick"
       @mousemove  = 'handMousemove($event)'
       @mouseout   = 'handMouseout($event)'
       @mouseleave = 'handMouseleave($event)'
       @mousedown  = 'handMousedown($event)'
-      :autofocus  = "autofocus"
+      @mouseover  = 'handMouseover($event)'
       :type       = "nativeType"
       :style      = "{
+        'width'  : width,
+        'height' : height,
         'border-radius' : round,
+        'background'    : type == 'threeBtn' ? 'transparent' : bgColor,
+        'color'         : fontColor,
+        'font-size'     : fontSize,
       }"
       :class      = "[
         type,
         {
-          'is-plain': plain,
-          'is-round': round,
-        }
+          'haloBtn-focus' : btnFocus && type == 'haloBtn',
+        },
       ]"
-      data-title  = "Awesome Button"
+      :data-title  = "threeTit"
     >
       <span v-if="type !== 'threeBtn'"><slot></slot></span>
     </button>
@@ -31,29 +39,71 @@
     data() {
       return {
         docStyle : '',
+        btnFocus : false,
       }
     },
     props: {
-      type: {             // type 类型    primary / success / warning / danger / info / text
+      type        : {  // type 类型        String    colorful / threeBtn
         type: String,
         default: 'colorful'
       },
-      round: {            // round	是否圆角按钮
+      round       : {  // round是否圆角按钮  String   2em / --px / --%
         type: String,
         default: '2em',
       },
-      nativeType: {       // 原生type属性  button / submit / reset
+      nativeType  : {  // 原生type属性      String   button / submit / reset
         type: String,
         default: 'button'
       },
-      size: String,       // size 尺寸    string	medium / small / mini
-      disabled: Boolean,  // disabled	是否禁用状态	boolean
-      plain: Boolean,  
-      autofocus: Boolean, // autofocus	是否默认聚焦
+      width       : {  // width            String	  auto / --px 
+        type: String,
+        default: 'auto'
+      }, 
+      height      : {  // height           String	  auto / --px 
+        type: String,
+        default: 'auto'
+      },
+      bgColor     : {  // bgColor	         String
+        type: String,
+        default: 'rgba(247, 35, 89, 1)'
+      },
+      fontColor   : {  // fontColor        String
+        type: String,
+        default: '#fff'
+      },  
+      fontSize    : {  // fontSize          String
+        type: String,
+        default: '1em'
+      },  
+      threeTit    : {  // threeTit	3d按钮文案
+        type: String,
+        default: 'Hover me I‘m awesome'
+      },
+      colorful    : {  // colorful按钮的hover色
+        type: String,
+        default: '#4405f7'
+      },
+      autofocus   : {  // autofocus	是否默认聚焦
+        type: Boolean,
+        default: false,
+      },
     },
     mounted () {
       document.body.onmouseup = (e) => { 
         this.documentMouseup(e);
+      }
+      this.btnFocus = this.autofocus;
+      switch(this.type){
+        case 'colorful':
+          this.docStyle = this.$refs.button.parentNode.style;
+          this.docStyle.setProperty('--colorful', this.colorful)    
+          break;
+        case 'threeBtn':
+          this.threeBtnOver({target : this.$refs.button});
+          break;
+        case 'haloBtn':
+          this.haloBtnOver({target : this.$refs.button});
+          break;
       }
     },
     methods: {
@@ -88,6 +138,18 @@
             break;
         }
       },
+      handMouseover(e){
+        switch(this.type){
+          case 'colorful':
+            break;
+          case 'threeBtn':
+            this.threeBtnOver(e);
+            break;
+          case 'haloBtn':
+            this.haloBtnOver(e, true);
+            break;
+        }
+      },
       documentMouseup(e){
         switch(this.type){
           case 'colorful':
@@ -109,7 +171,7 @@
       colorfulMove(e){
         let x  = e.pageX - e.target.offsetLeft;
         let y  = e.pageY - e.target.offsetTop;
-        let w = e.target.clientWidth  * 3;
+        let w = e.target.clientWidth  * 4;
         let h = e.target.clientHeight * 7;
         
         e.target.style.setProperty('--w', `${ w }px`)
@@ -150,6 +212,23 @@
         this.docStyle = e.target.parentNode.style;
         this.docStyle.setProperty('--tz', '-25px')        
       },
+      threeBtnOver(e){
+        this.docStyle = e.target.parentNode.style;
+        this.docStyle.setProperty('--background',  this.bgColor)        
+        this.docStyle.setProperty('--threeRadius', this.round)        
+      },
+      haloBtnOver(e, judge){
+        if(judge){
+          this.btnFocus = false;
+        }
+        this.docStyle = e.target.parentNode.style;
+        let rgba      = this.bgColor.split('(')[1].split(')')[0].split(',');
+        let boxShadow =  `0 0 1px 15px rgba(${rgba[0]},${rgba[1]},${rgba[2]}, 0.4), 
+                          0 0 1px 30px rgba(${rgba[0]},${rgba[1]},${rgba[2]}, 0.1), 
+                          0 0 1px 45px rgba(${rgba[0]},${rgba[1]},${rgba[2]}, 0.1)
+                        `;
+        this.docStyle.setProperty('--boxShadow', boxShadow)       
+      },
     }
   };
 </script>
@@ -176,6 +255,7 @@
 	padding: 1.2em 2em;
 
 }
+
 .colorful{
   border-radius: 2em;
   background: #f72359;
@@ -195,7 +275,7 @@
     top: var(--y);
     width: var(--w);
     height: var(--h);
-    background: radial-gradient(circle closest-side, #4405f7, transparent);
+    background: radial-gradient(circle closest-side, var(--colorful), transparent);
     transform: translate(-50%, -50%);
     transition: width .2s ease, height .2s ease;
   }
@@ -213,7 +293,7 @@
 
 .threeBtn{
   border: none;
-  
+
   &::before {
 		content: '';
 		position: absolute;
@@ -221,8 +301,8 @@
 		left: 0;
 		bottom: 0;
 		right: 0;
-		background: linear-gradient(135deg, #6e8efb, #a777e3);
-		border-radius: 4px;
+		background: var(--background);
+		border-radius: var(--threeRadius);
 		transition: box-shadow .5s ease, transform .2s ease; 
 		will-change: transform;
 		box-shadow: 0 2px 5px rgba(0, 0, 0, .2);
@@ -250,5 +330,56 @@
 			rotateX(    var(--rx, 0))
 			rotateY(    var(--ry, 0));
 	}
+}
+
+.haloBtn-box{
+  position: relative;
+  width: auto;
+  height: auto;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  
+  &:after {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+}
+.haloBtn{
+	cursor: pointer;
+  position: relative;
+  z-index: 1;
+  width: 80px;
+  height: 80px;
+  color: #fff;
+  background: #ed1c5b;
+  border-radius: 50%;
+  border: none;
+  -webkit-transition: box-shadow 400ms cubic-bezier(0.2, 0, 0.7, 1), -webkit-transform 200ms cubic-bezier(0.2, 0, 0.7, 1);
+  transition: box-shadow 400ms cubic-bezier(0.2, 0, 0.7, 1), transform 200ms cubic-bezier(0.2, 0, 0.7, 1);
+
+  &:hover {
+    box-shadow: var(--boxShadow)
+  }
+}
+.haloBtn-focus{
+  box-shadow: var(--boxShadow)
 }
 </style>

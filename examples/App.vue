@@ -1,8 +1,18 @@
 <template>
   <div id="app">
-    <ButtonThree>Hover me I'm awesome</ButtonThree>
-    <ButtonThree
-      type="threeBtn"
+    <ButtonThree 
+      width="300px"
+      round='0px'
+    >Hover me I'm awesome</ButtonThree>
+    <ButtonThree 
+      type="threeBtn" 
+      bgColor="#0ba9f7"
+    >Hover me I'm awesome</ButtonThree>
+    <ButtonThree 
+      type="haloBtn" 
+      height="50px" 
+      bgColor='rgb(171, 2, 185)'
+      :autofocus='true'
     >Hover me I'm awesome</ButtonThree>
   </div>
 </template>
