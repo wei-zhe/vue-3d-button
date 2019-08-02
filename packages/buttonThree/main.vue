@@ -43,7 +43,7 @@
       }
     },
     props: {
-      type        : {  // type 类型        String    colorful / threeBtn
+      type        : {  // type 类型        String    colorful / threeBtn / haloBtn
         type: String,
         default: 'colorful'
       },
