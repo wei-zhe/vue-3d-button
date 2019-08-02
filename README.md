@@ -1,7 +1,7 @@
 # vue-3d-button
 
 A Vue component to 3d-button
-一些3d已经特殊效果的按钮
+一些3d以及特殊效果的按钮
 
  ## demo演示
  [demo](https://wei-zhe.github.io/#/threeBtn)
